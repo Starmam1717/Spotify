@@ -1,0 +1,413 @@
+\documentclass[titlepage]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{mathrsfs,amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs} 
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{physics} 
+\usepackage{indentfirst}
+\usepackage{biblatex} %Imports biblatex package
+\addbibresource{sample.bib} %Import the bibliography file
+\linespread {1.5} 
+\usepackage{multicol}
+\usepackage{tabularx}
+
+\title{EDA and Analysis of Spotify top 100 in 2023}
+\author{Logan Keet}
+\date{November 2023}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction} 
+The data set that was analysed was collected from Kaggle. It is a collection of the most streamed songs on Spotify in 2023. The data set contains multiple features including a variety of audio features. Using these audio features a variety of machine learning algorithms were used to gain insight into what features have the largest impact in a songs chart success in Spotify. An EDA was also performed to gain insights into the data. 
+
+\section*{Data Cleaning} 
+\subsection*{Data Features} 
+\begin{multicols}{3}
+\begin{itemize}
+    \item track name 
+    \item artist(s) name 
+    \item artist count 
+    \item released year 
+    \item relased month 
+    \item released dat 
+    \item in Spotify playlists 
+    \item in Spotify charts  
+    \item streams
+    \item in apple charts 
+    \item in apple playlists 
+    \item in deezer charts 
+    \item in deezer playlists 
+    \item in shazam charts
+    \item bpm 
+    \item key 
+    \item mode 
+    \item danceablitiy percentage 
+    \item valence percentage 
+    \item energy percentage 
+    \item acousticness percentage 
+    \item instrumentalness percentage 
+    \item liveness percentage 
+    \item speechiness percentage
+ \end{itemize} 
+\end{multicols} 
+\subsection*{Cleaning}
+ There was found to be $95$ values elements in the key feature. The songs with the missing values were removed from the data set. The keys and the modes were also mapped to numeric values so they can be used in machine learning algorithms. The data set was then filtered to be only the top 100 in the Spotify charts. Apple, Deezer and Shazam columns were removed and the date columns were combined into one. Two new columns were created one for ranking the songs by most streamed and one for songs in the most playlists.   
+
+
+
+\section*{EDA}  
+\begin{table}[H]
+    \centering
+    \caption{Most and Least Streamed Song}
+    \begin{tabular}{lll}
+    \hline
+        Features & Most Streamed & Least Streamed \\ \hline
+        Rank\_By\_Streams & 1 & 813 \\ 
+        Ranked\_by\_in\_spotify\_playlists & 18 & 636 \\ 
+        track\_name & Shape of You & Que Vuelvas \\ 
+        artist(s)\_name & Ed Sheeran & Carin Leon, Grupo Frontera \\ 
+        artist\_count & 1 & 2 \\ 
+        in\_spotify\_playlists & 32181 & 763 \\ 
+        in\_spotify\_charts & 10 & 26 \\ 
+        streams(billions) & 3.56254389 & 0.2762 \\ 
+        release\_date & 2017-01-06 00:00:00 & 2022-12-09 00:00:00 \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+    \centering
+    \caption{In most and Least of Playlists}
+    \begin{tabular}{lll}
+    \hline
+        Features & In Most & In Least \\ \hline
+        Rank\_By\_Streams & 116 & 796 \\ 
+        Ranked\_by\_in\_spotify\_playlists & 1 & 814 \\ 
+        track\_name & Get Lucky - Radio Edit & Still With You \\ 
+        artist(s)\_name & Pharrell Williams, Nile Rodgers, Daft Punk & Jung Kook \\ 
+        artist\_count & 3 & 1 \\ 
+        in\_spotify\_playlists & 52898 & 31 \\ 
+        in\_spotify\_charts & 0 & 39 \\ 
+        streams(billions & 0.933815613 & 0.038411956 \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+    \centering
+    \caption{Top 10 Most streamed Artists}
+    \begin{tabular}{ll}
+    \hline
+        artist(s)\_name & streams(billion) \\ \hline
+        Taylor Swift & 11.85115108 \\ 
+        Ed Sheeran & 11.05125201 \\ 
+        Bad Bunny & 8.582384095 \\ 
+        Eminem & 6.183805596 \\ 
+        The Weeknd & 6.038640754 \\ 
+        Harry Styles & 6.033490512 \\ 
+        Imagine Dragons & 5.27248465 \\ 
+        Adele & 4.50874659 \\ 
+        SZA & 4.197341485 \\ 
+        Bruno Mars & 4.18573328 \\ 
+        Coldplay & 3.825176058 \\ 
+        Olivia Rodrigo & 3.55696115 \\ 
+        Avicii & 3.426754746 \\ 
+        Dua Lipa & 3.100230046 \\ 
+        Arctic Monkeys & 3.055659795 \\ 
+        Kendrick Lamar & 3.033135947 \\ 
+        Linkin Park & 2.985590613 \\ 
+        Post Malone, Swae Lee & 2.80809655 \\ 
+        Justin Bieber & 2.752482785 \\ 
+        Drake, WizKid, Kyla & 2.71392235 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.2]{image.png}
+    \caption{Distributions of the various features in the Data set}
+    \label{fig:enter-label}
+\end{figure} 
+
+It is seen that most songs have a single artist. For the audio features it is seen that most songs have have little acousticness, instrumentalness, liveness or speechiness. The other features seem to have a fairly normal distribution  of percentages. 
+
+\section*{Machine Learning Analysis} 
+\subsection*{Key, BPM and Mode} 
+The first three features that were explored using machine learning algorithms were Key, BPM and Mode. First a linear regression was performed on each of them separately.  
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.2]{KEy_bpm_mode_Linearreg.png}
+    \caption{Plots of Key, BPM and Modes. The coefficient for Key is $-0.23$, BPM is $0.018$ and mode is $-1.26$}
+    \label{fig:enter-label} 
+\end{figure}
+\noindent The evaluation results of this model were 
+\begin{table}[H]
+    \centering
+    \caption{Evaluation Results for Linear Regression of Key, BPM and Mode separately with means}
+    \begin{tabular}{lll}
+    \hline
+        Feature & MSE & R2 Score  \\ \hline
+        bpm & 348.8263171 & -0.01611716  \\ 
+        key & 344.9559527 & -0.004842943 \\ 
+        mode & 349.2622117 & -0.017386904 \\ \hline
+    \end{tabular}
+\end{table} 
+\noindent The mean BPM was found to be $122.57 bpm$. All the models $R^2$ scores were negative which indicates that Key, BPM and Mode are not good predictors of chart success. Looking at the residual plots of these features it is clear that Key and Mode are not good indicators of chart success. Looking at the residual plot of BPM there might be a correlation between BPM and chart success. 
+
+\begin{table}[H]
+    \centering
+    \caption{Linear Regression Model Using different BPM ranges}
+    \begin{tabular}{ll}
+    \hline
+        BPM Range & Predicted Success \\ \hline
+        65-85 & 10.31074084 \\ 
+        85-105 & 10.43378662 \\ 
+        105-125 & 10.55683241 \\ 
+        125-145 & 10.6798782 \\ 
+        145-165 & 10.80292399 \\ 
+        165-185 & 10.92596977 \\ 
+        185-206 & 11.05209171 \\ \hline
+    \end{tabular}
+\end{table}
+\noindent This table was created by running the different BPM Range's through the linear regression model for BPM. The predicted success is what the model predicts it would be on the charts. There is very little difference between each test this indicates that BPM is not a good indicator of chart success. 
+\newline\newline 
+\noindent Next I applied various Machine Learning Algorithms to the data set to see if there was a better predictive model.  
+
+\begin{table}[H]
+    \centering
+    \caption{Different Machine Learning Models for Key, BPM, and Mode}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lllll}
+    \hline
+        Feature & Importance (Decision Tree) & Importance (Random Forest) & Importance (Gradient Boosting) & Importance (Linear Regression) \\ \hline
+        bpm & 0.839325834 & 0.675831256 & 0.602238427 & 0.002971023 \\ 
+        key & 0.160674166 & 0.225068169 & 0.319117139 & 0.083250493 \\ 
+        mode & 0 & 0.099100575 & 0.078644434 & 0.913778484 \\ 
+        MSE & 362.408622 & 359.8348348 & 398.4740873 & 344.0749057 \\ 
+        R2 Score & -0.055681873 & -0.048184534 & -0.160739136 & -0.002276488 \\ \hline
+    \end{tabular}
+    }
+\end{table}
+
+\noindent These models do not make any better predictions all the $R2$ scores are still negative but the most important factor still seems to be $BPM$. 
+
+\begin{table}[H]
+    \centering 
+    \caption{Decision Tree and Random Forest Importance using different BPM Ranges}
+    \begin{tabular}{lll}
+    \hline
+        BPM Range & Predicted Success Decision Tree & Predicted Success Random Forest \\ \hline
+        65-85 & 0 & 3.414393304 \\ 
+        85-105 & 11.67647059 & 11.01320941 \\ 
+        105-125 & 11.67647059 & 10.54416105 \\ 
+        125-145 & 8.389830508 & 9.350957702 \\ 
+        145-165 & 8.389830508 & 8.549521973 \\ 
+        165-185 & 8.389830508 & 8.132539543 \\ 
+        185-206 & 26.33333333 & 28.51730315 \\ \hline
+    \end{tabular}
+\end{table} 
+ This predicts that songs have the most success in the range $65-85 bpm$. Given the $MSE$ and $R2$ scores of these models it is not the greatest predictor of a songs success in the charts.  
+
+
+\subsection*{Non-Engineered Audio Features} 
+\noindent The Audio Features tested were 
+\begin{enumerate}
+    \item danceablitiy percentage 
+    \item valence percentage 
+    \item energy percentage 
+    \item acousticness percentage 
+    \item instrumentalness percentage 
+    \item liveness percentage 
+    \item speechiness percentage 
+\end{enumerate}
+
+\noindent First a Linear Regression was performed on each of the features separately. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale = 0.2]{audio_features_non.png}
+    \caption{Linear Regression plot of the Audio features with residual plots}
+    \label{fig:enter-label}
+\end{figure} 
+
+\begin{table}[H]
+    \centering 
+    \caption{Means and Coefficient results of Linear Regression}
+    \begin{tabular}{lll}
+    \hline
+        Feature & Means & Coefficients \\ \hline
+        danceability\_\% & 67.41451415 & 0.059697246 \\ 
+        valence\_\% & 51.11685117 & 0.02433339 \\ 
+        energy\_\% & 64.32226322 & 0.095009237 \\ 
+        acousticness\_\% & 26.36900369 & -0.028012126 \\ 
+        instrumentalness\_\% & 1.685116851 & -0.081733765 \\ 
+        liveness\_\% & 18.14883149 & -0.078481017 \\ 
+        speechiness\_\% & 10.55596556 & -0.144386861 \\ \hline
+    \end{tabular}
+\end{table}
+\begin{table}[H]
+    \centering 
+    \caption{Evaluations of the models}
+    \begin{tabular}{lll}
+    \hline
+        Feature & MSE & R2 \\ \hline
+        danceability\_\% & 348.2479391 & -0.014432368 \\ 
+        valence\_\% & 348.6569715 & -0.015623863 \\ 
+        energy\_\% & 345.3723099 & -0.006055775 \\ 
+        acousticness\_\% & 346.1499651 & -0.008321054 \\ 
+        instrumentalness\_\% & 351.831779 & -0.024871951 \\ 
+        liveness\_\% & 351.2486857 & -0.023173424 \\ 
+        speechiness\_\% & 346.527514 & -0.009420839 \\ \hline
+    \end{tabular}
+\end{table} 
+
+\noindent All the $R2$ scores are negative and the $MSE$ scores are fairly high this indicates that these features alone are not the greatest indicator of chart success of a song. The residual plots of the data for, danceablity, valence, energy and accousticness suggest there might be weak correlation for chart success. The other features it is clear there is no linear relationship in the data. Using the mentioned four features I ran various percentage ranges through the model to predict its songs success.   
+\begin{table}[H]
+    \centering 
+    \caption{Top 10 Results of Predicted Success}
+    \begin{tabular}{lll}
+    \hline
+        Feature & Percentage Range & Predicted Success \\ \hline
+        energy\_\% & 0-20 & 5.398096615 \\ 
+        danceability\_\% & 0-20 & 7.147584791 \\ 
+        energy\_\% & 20-40 & 7.29828136 \\ 
+        danceability\_\% & 20-40 & 8.34152971 \\ 
+        acousticness\_\% & 80-100 & 8.833504013 \\ 
+        energy\_\% & 40-60 & 9.198466104 \\ 
+        acousticness\_\% & 60-80 & 9.393746524 \\ 
+        danceability\_\% & 40-60 & 9.535474629 \\ 
+        valence\_\% & 0-20 & 9.588768008 \\ 
+        acousticness\_\% & 40-60 & 9.953989035 \\ \hline
+    \end{tabular}
+\end{table} 
+\noindent The predicted success would be its estimated spot of the charts. 
+
+\subsection*{Engineered Audio Features} 
+The features were created by adding two features together and then dividing them by two to get the mean average percentage between them. 
+\begin{equation}
+    feature_{eng} = \frac{feature_i + feature_j}{2}
+\end{equation}
+\noindent All the features are 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+    \hline
+        Features  \\ \hline
+        danceability\_\%\_+\_valence\_\% & ~ & ~ \\ 
+        danceability\_\%\_+\_energy\_\% & ~ & ~ \\ 
+        danceability\_\%\_+\_acousticness\_\% & ~ & ~ \\ 
+        danceability\_\%\_+\_instrumentalness\_\% & ~ & ~ \\ 
+        danceability\_\%\_+\_liveness\_\% & ~ & ~ \\ 
+        danceability\_\%\_+\_speechiness\_\% & ~ & ~ \\ 
+        valence\_\%\_+\_energy\_\% & ~ & ~ \\ 
+        valence\_\%\_+\_acousticness\_\% & ~ & ~ \\ 
+        valence\_\%\_+\_instrumentalness\_\% & ~ & ~ \\ 
+        valence\_\%\_+\_liveness\_\% & ~ & ~ \\ 
+        valence\_\%\_+\_speechiness\_\% & ~ & ~ \\ 
+        energy\_\%\_+\_acousticness\_\% & ~ & ~ \\ 
+        energy\_\%\_+\_instrumentalness\_\% & ~ & ~ \\ 
+        energy\_\%\_+\_liveness\_\% & ~ & ~ \\ 
+        energy\_\%\_+\_speechiness\_\% & ~ & ~ \\ 
+        acousticness\_\%\_+\_instrumentalness\_\% & ~ & ~ \\ 
+        acousticness\_\%\_+\_liveness\_\% & ~ & ~ \\ 
+        acousticness\_\%\_+\_speechiness\_\% & ~ & ~ \\ 
+        instrumentalness\_\%\_+\_liveness\_\% & ~ & ~ \\ 
+        instrumentalness\_\%\_+\_speechiness\_\% & ~ & ~ \\ 
+        liveness\_\%\_+\_speechiness\_\% \\ \hline
+    \end{tabular}
+\end{table} 
+\begin{figure}[H]
+    \centering 
+    \hspace*{-2cm}
+    \includegraphics[scale = 0.3]{feature_eng_dist.png}
+    \caption{Distribution of the Engineered Features }
+    \label{fig:enter-label}
+\end{figure} 
+\noindent Most of the features have a close to a normal distribution. Next performed Linear Regression on all of the features separately.  
+
+\begin{table}[H]
+    \centering 
+    \hspace*{-3cm} 
+    \caption{Results for Linear Regression Models Separately}
+    \begin{tabular}{lllll}
+    \hline
+        Feature & Means & Coefficients & R2 & MSE \\ \hline
+        danceability\_\%\_+\_valence\_\% & 59.26568266 & 0.051063571 & -0.014369792 & 348.2264572 \\ 
+        danceability\_\%\_+\_energy\_\% & 65.86838868 & 0.140232773 & -0.006338781 & 345.4694641 \\ 
+        danceability\_\%\_+\_acousticness\_\% & 46.89175892 & -0.015928356 & -0.015133446 & 348.4886144 \\ 
+        danceability\_\%\_+\_instrumentalness\_\% & 34.5498155 & 0.060908383 & -0.013460414 & 347.9142737 \\ 
+        danceability\_\%\_+\_liveness\_\% & 42.78167282 & -0.005699272 & -0.017628532 & 349.3451609 \\ 
+        danceability\_\%\_+\_speechiness\_\% & 38.98523985 & -0.011007028 & -0.01724886 & 349.2148221 \\ 
+        valence\_\%\_+\_energy\_\% & 57.7195572 & 0.071048548 & -0.010712253 & 346.970848 \\ 
+        valence\_\%\_+\_acousticness\_\% & 38.74292743 & -0.008862186 & -0.016191421 & 348.8518102 \\ 
+        valence\_\%\_+\_instrumentalness\_\% & 26.40098401 & 0.029584826 & -0.015083187 & 348.4713608 \\ 
+        valence\_\%\_+\_liveness\_\% & 34.63284133 & -0.001202627 & -0.017375559 & 349.2583169 \\ 
+        valence\_\%\_+\_speechiness\_\% & 30.83640836 & -0.004858112 & -0.017327708 & 349.2418902 \\ 
+        energy\_\%\_+\_acousticness\_\% & 45.34563346 & 0.02995744 & -0.020372212 & 350.2870484 \\ 
+        energy\_\%\_+\_instrumentalness\_\% & 33.00369004 & 0.126414116 & -0.005184166 & 345.0730923 \\ 
+        energy\_\%\_+\_liveness\_\% & 41.23554736 & 0.045006609 & -0.013120633 & 347.7976291 \\ 
+        energy\_\%\_+\_speechiness\_\% & 37.43911439 & 0.058410427 & -0.015669438 & 348.6726168 \\ 
+        acousticness\_\%\_+\_instrumentalness\_\% & 14.02706027 & -0.06336439 & -0.009830582 & 346.6681763 \\ 
+        acousticness\_\%\_+\_liveness\_\% & 22.25891759 & -0.080961083 & -0.007319151 & 345.8060185 \\ 
+        acousticness\_\%\_+\_speechiness\_\% & 18.46248462 & -0.089103845 & -0.00053155 & 343.47588 \\ 
+        instrumentalness\_\%\_+\_liveness\_\% & 9.91697417 & -0.165935936 & -0.031237902 & 354.0171679 \\ 
+        instrumentalness\_\%\_+\_speechiness\_\% & 6.120541205 & -0.267516424 & -0.023320191 & 351.2990699 \\ 
+        liveness\_\%\_+\_speechiness\_\% & 14.35239852 & -0.215442196 & -0.020393669 & 350.2944144 \\ \hline
+    \end{tabular}
+\end{table} 
+\noindent None of the results had positive $R2$ scores. Looking at some of the residual plots(can view in notebook) there does seem to be slight correlation. A variety of ranges of percentages was ran through each model here are the ten most successful. Models where it was clear from the residual plots there was no correlation were not included.  
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+    \hline
+        Feature & Percentage Range & Predicted Success \\ \hline
+        danceability\_\%\_+\_energy\_\% & 0-20 & 2.70187349 \\ 
+        danceability\_\%\_+\_energy\_\% & 20-40 & 5.506528951 \\ 
+        valence\_\%\_+\_energy\_\% & 0-20 & 7.174884954 \\ 
+        danceability\_\%\_+\_valence\_\% & 0-20 & 8.06023054 \\ 
+        danceability\_\%\_+\_energy\_\% & 40-60 & 8.311184412 \\ 
+        valence\_\%\_+\_energy\_\% & 20-40 & 8.595855909 \\ 
+        danceability\_\%\_+\_valence\_\% & 20-40 & 9.081501952 \\ 
+        energy\_\%\_+\_acousticness\_\% & 0-20 & 9.532472142 \\ 
+        danceability\_\%\_+\_acousticness\_\% & 80-100 & 9.925094852 \\ 
+        valence\_\%\_+\_energy\_\% & 40-60 & 10.01682686 \\ \hline
+    \end{tabular}
+\end{table}
+\noindent The predicted success would be its estimated spot of the charts. \newline \newline
+
+
+The data was then ran through various machine learning algorithms with all features together. 
+\begin{table}[H]
+    \centering 
+    \caption{Success Metrics of the Models}
+    \begin{tabular}{lll}
+    \hline
+        Model & MSE & R2 Score \\ \hline
+        Decision Tree & 330.2744319 & -0.052529096 \\ 
+        Random Forest & 312.391909 & 0.004459498 \\ 
+        Gradient Boosting & 353.2789165 & -0.125840522 \\ 
+        Linear Regression & 310.8894583 & 0.009247556 \\ \hline
+    \end{tabular}
+\end{table} 
+\noindent The two most successful models are Random Forest and Linear Regression. Feature importance was performed on these two models 
+\begin{figure}
+    \centering 
+    \hspace*{-2cm}
+    \includegraphics[scale = 0.4]{importance.png}
+    \caption{Feature Importance visualization}
+    \label{fig:enter-label}
+\end{figure} 
+
+
+
+
+
+
+
+\end{document}
